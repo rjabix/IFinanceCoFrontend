@@ -1,25 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
+import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom';
+import {BackendApiUrlProvider} from "./Contexts";
+import ProtectedRoute from "./components/ProtectedRoute";
+import WelcomePage from "./pages/welcome/WelcomePage";
+import MainDashboard from "./pages/main/MainDashboard";
+import LoginPage from "./pages/login/LoginPage";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <BackendApiUrlProvider
+            backendUrl={process.env.REACT_APP_BACKEND_URL || require('../package.json').backendUrl}>
+
+        <Router>
+            <Routes>
+
+                    <Route path={'/'} element={<WelcomePage />}/>
+                    <Route path={'/login'} element={<LoginPage />}/>
+
+                    <Route element={<ProtectedRoute />}>
+                        <Route path={'/dashboard'} element={<MainDashboard />}/>
+                    </Route>
+
+                    {/*Default route goes to main*/}
+                    <Route path={'*'} element={<Navigate to="/" />}/>
+            </Routes>
+        </Router>
+        </BackendApiUrlProvider>
+    );
 }
 
 export default App;

@@ -1,0 +1,8 @@
+
+export default function MainDashboard(){
+    return (
+        <div>
+            <h1>Main Page</h1>
+        </div>
+    );
+}
